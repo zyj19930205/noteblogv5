@@ -17,5 +17,5 @@ v4 --> v5的一些改变和升级
 ---
 点击链接加入群聊【[笔记博客 ~ 交流反馈：697053454](https://jq.qq.com/?_wv=1027&k=5ZEGGl8)】
 ---
-二维码加群：
+
 ![avatar](noteblogqqgroup.png)
