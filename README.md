@@ -6,7 +6,7 @@
 
 ![avatar](noteblogqqgroup.png)
 ---
-v4 --> v5的一些改变和升级
+## noteblogv4 -> noteblogv5 的一些改变和升级
 1. 从jpa换成mybatis-plus，更易上手
 2. 升级layui版本和springboot版本
 3. 后台管理UI升级为LayuiAdminPro
