@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/static/assets/img/favicon.png">
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/plugins/animate/animate.min.css">
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+    <link rel="stylesheet" href="/static/assets/css/layui-theme-nbv5.css">
+    <link rel="stylesheet" href="/static/plugins/pushbar/pushbar.css">
+    <link rel="stylesheet" href="/static/assets/css/simple.css">
+    <link rel="stylesheet" href="/static/assets/css/article.css">
+    <title>用户留言</title>
+</head>
+<body class="layui-anim layui-anim-fadein simple">
+<!--顶部导航栏-->
+<div class="header mini">
+    <div class="layui-container header-content">
+        <div class="layui-row nav-header">
+            <div class="layui-col-xs9 layui-col-sm4">
+                <a class="logo" href="/index">
+                    <i th:class="${settings.website_fontawesome}"></i>&nbsp;[[${settings.website_logo_words}]]</a>
+                <small th:text="${settings.website_logo_small_words}"></small>
+            </div>
+            <div class="layui-col-xs3 layui-col-sm-offset2 layui-col-sm4 layui-hide-md layui-hide-lg nav-btn">
+                <a href="javascript:nbv5front.hideOpen();" id="side-nav-open"
+                   data-pushbar-target="bottomNav"><i class="fa fa-navicon"></i> </a>
+                <a href="javascript:nbv5front.hideClose();" id="side-nav-close" style="display: none;"
+                   data-pushbar-close><i class="fa fa-times" style="font-size: 18px;"></i> </a>
+            </div>
+            <div class="layui-col-sm5 layui-hide layui-show-lg-inline-block layui-show-md-inline-block nav-btn right">
+                <a href="/index" th:data-title="${settings.menu_home}">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <span th:text="${settings.menu_home}"></span>
+                </a>
+                <a href="/note" th:data-title="${settings.menu_note}">
+                    <i class="layui-icon layui-icon-form"></i>
+                    <span th:text="${settings.menu_note}"></span>
+                </a>
+                <a href="/message" class="active" th:data-title="${settings.menu_message}">
+                    <i class="layui-icon layui-icon-chat"></i>
+                    <span th:text="${settings.menu_message}"></span>
+                </a>
+                <a href="javascript:nbv5front.searchDialog();" data-title="搜索">
+                    <i class="layui-icon layui-icon-search"></i>
+                    <span>搜索</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="header-hr">
+
+<!--顶部文字-->
+<div class="layui-container top-block">
+    <blockquote class="layui-elem-quote">
+        <span class="layui-breadcrumb">
+            <a href="/">网站首页</a>
+            <a href="/message">网友留言</a>
+        </span>
+        <div class="clock layui-show-md-inline-block layui-show-lg-inline-block layui-hide-xs layui-hide-sm">
+            <span class="clock-font">当前日期</span>：<span id="current-datetime"></span>
+        </div>
+    </blockquote>
+</div>
+
+<!--内容文章正体-->
+<div id="main-body" class="layui-container">
+
+</div>
+
+
+<!--底部导航栏-->
+<div class="layui-fluid bottom-nav">
+    <div class="layui-row bottom-logo">
+        <div class="layui-col-md4 layui-col-md-offset4 text-center">
+            <img th:src="${settings.bottom_logo}" alt="笔记博客">
+        </div>
+    </div>
+    <hr style="background: rgba(230, 230, 230, 0.54);">
+    <div class="layui-row layui-col-space30" style="padding-top: 20px;">
+        <div class="layui-col-md4 copyright">
+            <p style="text-align: center;">
+                <i class="fa fa-copyright"></i>&nbsp;[[${settings.footer_words}]] powered by
+                <a href="//wuwenbin.me" target="_blank" style="color: #1E9FFF;">NoteBlog</a> in 2019 v5.
+            </p>
+        </div>
+        <div class="layui-col-md4 cates">
+            <p>分类</p>
+            <span class="layui-badge-rim no-select" th:each="cate :${cateList}"><a
+                    th:href="${'/s/c?q='+cate.name}" th:text="${cate.name}"></a>
+            </span>
+        </div>
+        <div class="layui-col-md4 manage">
+            <p style="margin-bottom: 10px;">数据・用户</p>
+            <p class="data">
+                <span>[[${#numbers.formatDecimal(blogCount,1,'COMMA',0,'POINT')}]] <b>文章</b></span>
+                <span>[[${#numbers.formatDecimal(commentCount,1,'COMMA',0,'POINT')}]] <b>评论</b></span>
+                <span>[[${#numbers.formatDecimal(runningDays,1,'COMMA',0,'POINT')}]] <b>天</b></span>
+                <span>[[${#numbers.formatDecimal(blogWords,1,'COMMA',0,'POINT')}]] <b>字数</b></span>
+            </p>
+            <p>
+                <a th:if="${nbv5su ==null}" onclick="nbv5front.bottomLogin();"
+                   class="layui-btn layui-btn-sm layui-btn-primary">登录</a>
+                <span th:if="${nbv5su !=null}" class="layui-mr15">
+                    <img th:src="${nbv5su.avatar}" class="layui-circle" style="width: 30px;"/>
+                    <span th:text="${nbv5su.nickname}" class="layui-text layui-word-aux"></span>
+                </span> <a onclick="nbv5front.tokenLogout();" class="layui-btn layui-btn-sm layui-btn-primary">退出</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!--移动设备菜单导航-->
+<div data-pushbar-id="bottomNav" class="pushbar from_bottom">
+    <div class="layui-container" style="padding-top: 20px;padding-bottom: 15px;">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend style="text-align: center;font-size: 16px;">导航按钮</legend>
+        </fieldset>
+        <p class="layui-breadcrumb" lay-separator="|" style="text-align: center;margin-top: 10px;">
+            <a href="/index" th:text="${settings.menu_home}"></a>
+            <a href="/note" th:text="${settings.menu_note}"></a>
+            <a href="/message" th:text="${settings.menu_message}"></a>
+            <a href="/s/w">搜索</a>
+        </p>
+        <ul class="layui-timeline"
+            style="margin-top: 10px;padding-top: 15px;margin-bottom: 30px;border-top: 1px dotted #EEEEEE;">
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title" style="font-size: 16px;">博客信息</h3>
+                    <p style="padding-bottom: 5px;" th:utext="${settings.info_label_text}"></p>
+                    <p style="border-top: 1px solid #f5f5f5;padding-top: 5px;padding-bottom: 5px;">
+                        交流讨论：<i class="fa fa-qq"></i>
+                        <a target="_blank"
+                           href="//shang.qq.com/wpa/qunwpa?idkey=7bd7c01acf4e6124bfaab5a6d10504b917d5292f029b66887d00006a16a00930">
+                            697053454
+                        </a>。
+                    </p>
+                    <p style="border-top:1px solid #F5F5F5;padding-top: 5px;">
+                        项目源码：<i class="fa fa-github-alt"></i>
+                        <a target="_blank" href="https://github.com/miyakowork/noteblogv5">miyakowork/noteblogv5</a>。
+                    </p>
+                </div>
+            </li>
+            <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title" style="font-size: 16px;">作者 </h3>
+                    <p>联系作者：<i class="fa fa-envelope"></i> <a href="#">wuwenbinwork#163.com</a></p>
+                    <p>作者网站：<i class="fa fa-link"></i> <a href="https://wuwenbin.me">https://wuwenbin.me</a></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="/static/plugins/layui/layui.js"></script>
+<script src="/static/assets/js/svg.js"></script>
+<script src="/static/plugins/jquery/jquery-2.1.4.min.js"></script>
+<script src="/static/assets/js/script.js"></script>
+<script src="/static/assets/js/nbv5.js"></script>
+<script src="/static/plugins/hc-sticky/hc-sticky.min.js"></script>
+<script src="/static/plugins/pushbar/pushbar.js"></script>
+<script th:inline="javascript">
+    $(function () {
+        window.addEventListener("scroll", nbv5front.headerScroll());
+        nbv5front.miniHeader("main-body");
+        new Pushbar({
+            blur: true,
+            overlay: true
+        });
+
+
+        layui.use(['layer', 'element', 'message'], function () {
+            var layer = layui.layer,
+                element = layui.element,
+                message = layui.message;
+
+            var settings = [[${settings}]];
+            var linkList = [[${linkList}]];
+            var nbv5su = [[${nbv5su}]];
+            var messages = [[${messages}]];
+
+            nbv5front.miniHeaderNavBtn(layer);
+
+            element.render();
+
+            message(settings, linkList, nbv5su, messages);
+        });
+
+    });
+</script>
+</body>
+</html>
