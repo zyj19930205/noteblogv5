@@ -119,6 +119,15 @@ public interface ArticleService extends IService<Article> {
     }
 
     /**
+     * 处理隐藏标签
+     * @param article
+     */
+    default void handleHideSpan(Article article){
+        String contentHtml=article.getContent();
+
+    }
+
+    /**
      * 修改文章的 top 值
      *
      * @param articleId

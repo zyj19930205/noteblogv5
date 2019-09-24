@@ -19,6 +19,17 @@
             color: #cccccc;
             background-color: rgba(194, 194, 194, 0.3);
         }
+
+        .ke-container .ke-toolbar .ke-separator {
+            height: 20px !important;
+            margin: 8px 3px !important;
+        }
+
+        .ke-icon-hide4comment {
+            background-image: url(/static/plugins/nkeditor/plugins/hide4comment/hide.png) !important;
+            width: 16px;
+            height: 16px;
+        }
     </style>
 </head>
 <body onscroll="isTop(this);">
@@ -160,6 +171,7 @@
 <script src="/static/plugins/jquery/jquery-1.11.3.min.js"></script>
 <script src="/static/plugins/nkeditor/libs/JDialog/JDialog.min.js"></script>
 <script src="/static/plugins/nkeditor/NKeditor-all-min.js"></script>
+<script src="/static/plugins/wangEditor/wangEditor.min.js"></script>
 <script src="/static/assets/js/noteblogv5.js"></script>
 <script>
     layui.config({
@@ -168,6 +180,10 @@
         index: 'lib/index' //主入口模块
         , formSelects: 'formSelects-v4'
     }).use(['index', 'article_add', 'formSelects', 'inputTags']);
+
+    KindEditor.lang({
+        hide4comment: '回复可见'
+    });
 </script>
 </body>
 </html>

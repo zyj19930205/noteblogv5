@@ -104,7 +104,7 @@ layui.define(['form', 'formSelects', 'upload', 'element', 'inputTags', 'admin'],
                     'formatblock', 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold',
                     'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'image', 'graft',
                     'insertfile', 'table', 'hr', 'emoticons', 'pagebreak',
-                    'link', 'unlink', 'about'
+                    'link', 'unlink', 'about', '|', 'hide4comment'
                 ],
                 uploadJson: '/management/upload?reqType=nk',
                 dialogOffset: 0, //对话框距离页面顶部的位置，默认为0居中，
