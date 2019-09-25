@@ -15,7 +15,7 @@
         FROM nb_log l
         WHERE DATE_FORMAT(l.time, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
         GROUP BY DATE_FORMAT(l.time, '%Y-%m-%d')
-        ORDER BY cnt DESC
+        ORDER BY l.time DESC
     </select>
 
     <select id="todayVisit" resultType="long">

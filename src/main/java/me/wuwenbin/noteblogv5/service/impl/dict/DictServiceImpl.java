@@ -37,7 +37,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public List<Dict> findCatesByArticleId(Long articleId) {
+    public List<Dict> findCatesByArticleId(String articleId) {
         String sql = "select * from nb_dict where `group` = ? and id in (select cate_id from refer_article_cate where article_id = ?)";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Dict.class), DictGroup.GROUP_CATE, articleId);
     }
@@ -51,7 +51,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public List<Dict> findTagsByArticleId(Long articleId) {
+    public List<Dict> findTagsByArticleId(String articleId) {
         String sql = "select * from nb_dict where `group`=? and  id in (select tag_id from refer_article_tag where article_id = ?)";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Dict.class), DictGroup.GROUP_TAG, articleId);
     }
@@ -67,7 +67,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     @Override
-    public void deleteArticleRefer(Long articleId) {
+    public void deleteArticleRefer(String articleId) {
         String sql1 = "delete from refer_article_cate where article_id = ?";
         jdbcTemplate.update(sql1, articleId);
         String sql2 = "delete from refer_article_tag where article_id = ?";

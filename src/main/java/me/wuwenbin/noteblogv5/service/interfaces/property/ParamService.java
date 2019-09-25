@@ -94,7 +94,7 @@ public interface ParamService extends IService<Param> {
                 final String val = value == null ? "" : value;
                 paramMapper.updateValueByName(name, val);
                 CacheUtils.removeParamCache(name);
-                return ResultBean.ok(StrUtil.format("更新参数成功！"));
+                return ResultBean.ok(StrUtil.format("更新成功！"));
             }
         }
     }

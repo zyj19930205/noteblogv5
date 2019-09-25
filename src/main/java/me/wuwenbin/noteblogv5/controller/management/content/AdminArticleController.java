@@ -9,11 +9,11 @@ import me.wuwenbin.noteblogv5.constant.DictGroup;
 import me.wuwenbin.noteblogv5.controller.common.BaseController;
 import me.wuwenbin.noteblogv5.model.LayuiTable;
 import me.wuwenbin.noteblogv5.model.ResultBean;
-import me.wuwenbin.noteblogv5.model.entity.Article;
-import me.wuwenbin.noteblogv5.model.entity.Dict;
-import me.wuwenbin.noteblogv5.model.entity.User;
+import me.wuwenbin.noteblogv5.model.entity.*;
 import me.wuwenbin.noteblogv5.service.interfaces.content.ArticleService;
+import me.wuwenbin.noteblogv5.service.interfaces.content.HideService;
 import me.wuwenbin.noteblogv5.service.interfaces.dict.DictService;
+import me.wuwenbin.noteblogv5.service.interfaces.msg.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,26 +30,30 @@ import java.util.List;
 @RequestMapping("/management/article")
 public class AdminArticleController extends BaseController {
 
-    private final HttpServletRequest request;
     private final ArticleService articleService;
     private final DictService dictService;
+    private final HideService hideService;
+    private final CommentService commentService;
 
-    public AdminArticleController(HttpServletRequest request,
-                                  ArticleService articleService, DictService dictService) {
-        this.request = request;
+    public AdminArticleController(ArticleService articleService,
+                                  DictService dictService, HideService hideService,
+                                  CommentService commentService) {
         this.articleService = articleService;
         this.dictService = dictService;
+        this.hideService = hideService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/add")
-    public String publishArticlePage() {
-        request.setAttribute("cateList", dictService.list(Wrappers.<Dict>query().eq("`group`",DictGroup.GROUP_CATE)));
+    public String publishArticlePage(HttpServletRequest request) {
+        request.setAttribute("cateList", dictService.list(Wrappers.<Dict>query().eq("`group`", DictGroup.GROUP_CATE)));
         return "management/article/add";
     }
 
     @GetMapping("/edit")
-    public String edit(Model model, Long id) {
+    public String edit(Model model, String id, HttpServletRequest request) {
         Article article = articleService.getById(id);
+        articleService.handleShowArticle(article, getSessionUser(request));
         model.addAttribute("cateList", dictService.list(Wrappers.<Dict>query().eq("`group`", DictGroup.GROUP_CATE)));
         model.addAttribute("editArticle", article);
         model.addAttribute("tags", dictService.findTagsByArticleId(id));
@@ -73,13 +77,13 @@ public class AdminArticleController extends BaseController {
 
     @PostMapping("/create")
     @ResponseBody
-    public ResultBean articleCreate(@Valid Article article, BindingResult result,
+    public ResultBean articleCreate(@Valid Article article, BindingResult result, HttpServletRequest request,
                                     @RequestParam(required = false, value = "cateIds[]") List<Integer> cateIds,
                                     @RequestParam(required = false, value = "tagNames[]") List<String> tagNames) {
-        if (cateIds.size() > 3) {
-            return ResultBean.error("分类选择最多不能超过3个！");
-        }
         if (result.getErrorCount() == 0) {
+            if (cateIds.size() > 3) {
+                return ResultBean.error("分类选择最多不能超过3个！");
+            }
             User su = getSessionUser(request);
             article.setAuthorId(su.getId());
             try {
@@ -95,7 +99,7 @@ public class AdminArticleController extends BaseController {
 
     @ResponseBody
     @PostMapping("/update/{field}")
-    public ResultBean updateArticle(Long id, @PathVariable("field") String field, Boolean status) {
+    public ResultBean updateArticle(String id, @PathVariable("field") String field, Boolean status) {
         String appreciable = "appreciable", commented = "commented", top = "top";
         if (top.equalsIgnoreCase(field)) {
             boolean res = articleService.updateTopById(id, status);
@@ -111,13 +115,13 @@ public class AdminArticleController extends BaseController {
 
     @PostMapping("/update")
     @ResponseBody
-    public ResultBean articleUpdate(@Valid Article article, BindingResult result,
+    public ResultBean articleUpdate(@Valid Article article, BindingResult result, HttpServletRequest request,
                                     @RequestParam(required = false, value = "cateIds[]") List<Integer> cateIds,
                                     @RequestParam(required = false, value = "tagNames[]") List<String> tagNames) {
-        if (cateIds.size() > 3) {
-            return ResultBean.error("分类选择最多不能超过3个！");
-        }
         if (result.getErrorCount() == 0) {
+            if (cateIds.size() > 3) {
+                return ResultBean.error("分类选择最多不能超过3个！");
+            }
             User su = getSessionUser(request);
             article.setAuthorId(su.getId());
             try {
@@ -134,9 +138,12 @@ public class AdminArticleController extends BaseController {
 
     @PostMapping("/delete")
     @ResponseBody
-    public ResultBean delete(Long id) {
+    public ResultBean delete(String id) {
         boolean res = articleService.removeById(id);
         dictService.deleteArticleRefer(id);
+        hideService.deleteArticlePurchaseRefer(id);
+        hideService.remove(Wrappers.<Hide>query().eq("article_id", id));
+        commentService.remove(Wrappers.<Comment>query().eq("article_id", id));
         return handle(res, "删除成功！", "删除失败！");
     }
 }

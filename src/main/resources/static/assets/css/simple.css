@@ -304,7 +304,7 @@ col12
     visibility: visible;
     opacity: 1;
     height: 100%;
-    padding-top: 50px;
+    padding-top: 30px;
     -webkit-animation: fade-in .5s;
     animation: fade-in .5s;
     word-break: break-word;

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
 
@@ -44,13 +45,13 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping("/{aId}")
-    public String article(@PathVariable("aId") Long aId, Model model,
+    public String article(@PathVariable("aId") String aId, Model model,
                           @ModelAttribute("settings") Map settingsMap,
-                          Page<CommentBo> commentPage) {
+                          Page<CommentBo> commentPage,
+                          HttpServletRequest request) {
         articleService.updateViewsById(aId);
 
         Article article = articleService.getById(aId);
-        model.addAttribute("article", article);
         model.addAttribute("author", userService.getById(article.getAuthorId()).getNickname());
 
         model.addAttribute("cateList", dictService.findList(DictGroup.GROUP_CATE));
@@ -65,6 +66,10 @@ public class ArticleController extends BaseController {
         OrderItem oi = OrderItem.desc("post");
         commentPage.addOrder(oi);
         model.addAttribute("comments", commentService.findCommentPage(commentPage, null, null, Collections.singletonList(aId), true));
+
+        //处理隐藏标签
+        articleService.handleShowArticle(article, getSessionUser(request));
+        model.addAttribute("article", article);
         return "frontend/article";
     }
 
@@ -77,7 +82,7 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/comments")
     @ResponseBody
-    public IPage<CommentBo> comments(Page<CommentBo> page, Long articleId) {
+    public IPage<CommentBo> comments(Page<CommentBo> page, String articleId) {
         OrderItem oi = OrderItem.desc("post");
         page.addOrder(oi);
         return commentService.findCommentPage(page, null, null, Collections.singletonList(articleId), true);
@@ -86,7 +91,7 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/approve")
     @ResponseBody
-    public ResultBean approve(@RequestParam Long articleId) {
+    public ResultBean approve(@RequestParam String articleId) {
         boolean res = articleService.updateApproveCntById(articleId) == 1;
         return handle(res, "感谢您的点赞！", "请稍后再试！");
     }

@@ -15,7 +15,7 @@ import me.wuwenbin.noteblogv5.model.entity.Comment;
 @EqualsAndHashCode(callSuper = true)
 public class CommentBo extends Comment {
 
-    private Long articleId;
+    private String articleId;
     private String nickname;
     private String avatar;
     private String title;

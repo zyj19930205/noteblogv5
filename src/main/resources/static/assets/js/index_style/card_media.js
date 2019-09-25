@@ -28,7 +28,7 @@ layui.define(['laytpl', 'laypage', 'timeago'], function (exports) {
         '       {{# } }}' +
         '       {{# if(item.reprinted){ }}' +
         '       <span class="zhuanzai">转载</span>' +
-        '       {{# } }}'+
+        '       {{# } }}' +
         '       {{# if(item.urlSeq != null && item.urlSeq !=""){ }}' +
         '       <a href="/article/u{{ item.urlSeq }}">{{item.title}}</a>' +
         '       {{# }else{ }}' +
@@ -57,7 +57,7 @@ layui.define(['laytpl', 'laypage', 'timeago'], function (exports) {
         '<a href="/article/{{item.id}}" style="display:block;padding: 7px;border: 1px solid #dedede;box-shadow: 0 1px 3px rgba(0, 0, 0, .3);border-radius: 4px;">' +
         '<figure  class="card-img" style="background-image:url({{item.cover}});' +
         'cursor: pointer;background-size: cover;margin:0;" ></figure>' +
-        '<div class="card-content">{{nbv5front.substr(item.summary,120) }}</div> ' +
+        '<div class="card-content">{{nbv5front.substr(item.summary,120)}}</div> ' +
         '</a> ' +
         '</div>' +
         '       {{# } }}' +
@@ -111,6 +111,7 @@ layui.define(['laytpl', 'laypage', 'timeago'], function (exports) {
             $("#main-body").prepend(html);
             initPage(laypage, page);
             timeago.render($('.timeago'));
+            cardContent();
         });
     });
 
@@ -130,4 +131,14 @@ function initPage(pageObj, page) {
             }
         }
     });
+}
+
+
+function cardContent() {
+    var $cardContents = $("div.card-content");
+    for (var i = 0; i < $cardContents.length; i++) {
+        if ($("div.card-content:eq(" + i + ")").prev("figure.card-img").width() - $("div.card-content:eq(" + i + ")").width() >= 50) {
+            $("div.card-content:eq(" + i + ")").css("width", "100%");
+        }
+    }
 }

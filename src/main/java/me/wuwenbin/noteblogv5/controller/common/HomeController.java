@@ -57,20 +57,20 @@ public class HomeController extends BaseController {
 
         String typesetting = MapUtil.getStr(settingsMap, "typesetting");
 
-        Map<Long, String> articleAuthorNames = page.getRecords().stream()
+        Map<String, String> articleAuthorNames = page.getRecords().stream()
                 .collect(toMap(Article::getId, article -> userService.getById(article.getAuthorId()).getNickname()));
         model.addAttribute("articleAuthors", articleAuthorNames);
 
-        Map<Long, List<Dict>> articleCatesMap = page.getRecords().stream()
+        Map<String, List<Dict>> articleCatesMap = page.getRecords().stream()
                 .collect(toMap(Article::getId, article -> dictService.findCatesByArticleId(article.getId())));
         model.addAttribute("articleCatesMap", articleCatesMap);
 
-        Map<Long, Integer> commentCounts = page.getRecords().stream()
+        Map<String, Integer> commentCounts = page.getRecords().stream()
                 .collect(toMap(Article::getId, article -> commentService.count(Wrappers.<Comment>query().eq("article_id", article.getId()))));
         model.addAttribute("articleCommentCountMap", commentCounts);
 
         if ("card_media".equalsIgnoreCase(typesetting) || "long_card".equalsIgnoreCase(typesetting)) {
-            Map<Long, List<Dict>> articleTagsMap = page.getRecords().stream()
+            Map<String, List<Dict>> articleTagsMap = page.getRecords().stream()
                     .collect(toMap(Article::getId, article -> dictService.findTagsByArticleId(article.getId())));
             model.addAttribute("articleTagsMap", articleTagsMap);
         }

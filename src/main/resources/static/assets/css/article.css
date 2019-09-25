@@ -148,3 +148,7 @@ div.hide-article-box {
     margin-left: 20px;
     cursor: pointer;
 }
+
+blockquote[data-htype] a {
+    cursor: pointer;
+}

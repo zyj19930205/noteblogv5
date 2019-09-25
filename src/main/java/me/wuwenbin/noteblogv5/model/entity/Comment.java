@@ -26,7 +26,7 @@ public class Comment implements Serializable {
 
     private Long id;
     @NotNull
-    private Long articleId;
+    private String articleId;
     @NotNull
     private Long userId;
     private Long replyId;

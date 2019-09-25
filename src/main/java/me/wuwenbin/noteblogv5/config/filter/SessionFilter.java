@@ -1,6 +1,8 @@
 package me.wuwenbin.noteblogv5.config.filter;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.UserAgentUtil;
 import me.wuwenbin.noteblogv5.constant.NBV5;
 import me.wuwenbin.noteblogv5.controller.common.BaseController;
 import me.wuwenbin.noteblogv5.model.entity.Log;
@@ -70,6 +72,8 @@ public class SessionFilter extends BaseController implements HandlerInterceptor 
                     .requestMethod(request.getMethod())
                     .contentType(request.getContentType())
                     .build();
+            Browser browser = UserAgentUtil.parse(logger.getUserAgent()).getBrowser();
+            logger.setBrowser(browser.getName());
             //noinspection unchecked
             List<Log> oldCacheLogs = (List<Log>) nbServletContext.getAttribute(NBV5.LOG_CACHE_KEY);
             List<Log> newCacheLogs = new LinkedList<>();

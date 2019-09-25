@@ -77,7 +77,7 @@ layui.define(["form", "table", "element"], function (exports) {
     table.on('tool(article)', function (obj) {
         var data = obj.data;
         if (obj.event === 'del') {
-            layer.confirm('删除不可恢复，确认删除吗？', function (index) {
+            layer.confirm('删除不可恢复（包括文章的评论），确认删除吗？', function (index) {
                 obj.del();
                 NBV5.post("/management/article/delete", {id: data.id});
                 layer.close(index);

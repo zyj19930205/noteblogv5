@@ -25,7 +25,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public IPage<CommentBo> findCommentPage(IPage<CommentBo> page, String nickname, String clearComment, List<Long> articleIds, boolean enable) {
+    public IPage<CommentBo> findCommentPage(IPage<CommentBo> page, String nickname, String clearComment, List<String> articleIds, boolean enable) {
         return commentMapper.findCommentPage(page, nickname, clearComment, articleIds, enable);
     }
 

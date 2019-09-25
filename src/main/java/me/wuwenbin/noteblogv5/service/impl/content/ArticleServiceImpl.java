@@ -1,5 +1,6 @@
 package me.wuwenbin.noteblogv5.service.impl.content;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,6 +36,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public int createArticle(Article article, List<Integer> cateIds, List<String> tagNames) throws PinyinException {
+        article.setId(IdUtil.objectId());
         if (CollectionUtils.isEmpty(cateIds)) {
             throw new AppRunningException("文章至少得有一个分类归属！");
         }
@@ -46,10 +48,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 throw new AppRunningException("已存在 url：" + article.getUrlSeq());
             }
         }
+        handleHideArticle(article);
         setArticleSummaryAndTxt(article);
         decorateArticle(article);
         int affect = articleMapper.insert(article);
-        Long articleId = article.getId();
+        String articleId = article.getId();
         cateIds.forEach(cateId -> jdbcTemplate.update("insert into refer_article_cate values (?,?)", articleId, cateId));
         if (!CollectionUtils.isEmpty(tagNames)) {
             saveArticleTags(articleId, tagNames);
@@ -72,10 +75,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 throw new AppRunningException("已存在 url：" + article.getUrlSeq());
             }
         }
+        handleHideArticle(article);
         setArticleSummaryAndTxt(article);
         decorateArticle(article);
         int affect = articleMapper.updateById(article);
-        long articleId = article.getId();
+        String articleId = article.getId();
         jdbcTemplate.update("delete from refer_article_cate where article_id = ?", articleId);
         cateIds.forEach(cateId -> jdbcTemplate.update("insert into refer_article_cate values (?,?)", articleId, cateId));
         if (!CollectionUtils.isEmpty(tagNames)) {
@@ -96,7 +100,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public boolean updateTopById(long articleId, boolean top) {
+    public boolean updateTopById(String articleId, boolean top) {
         if (top) {
             int maxTop = articleMapper.selectMaxTop();
             return update(Wrappers.<Article>update().set("top", maxTop + 1).eq("id", articleId));
@@ -108,12 +112,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void updateViewsById(long articleId) {
+    public void updateViewsById(String articleId) {
         articleMapper.updateViewsById(articleId);
     }
 
     @Override
-    public int updateApproveCntById(long articleId) {
+    public int updateApproveCntById(String articleId) {
         return articleMapper.updateApproveCntById(articleId);
     }
 }

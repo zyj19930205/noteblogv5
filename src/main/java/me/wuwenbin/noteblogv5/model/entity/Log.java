@@ -23,5 +23,6 @@ public class Log implements Serializable {
     private String userAgent;
     private String username;
     private Date time;
+    private String browser;
 
 }

@@ -46,7 +46,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      *
      * @param articleId
      */
-    void updateViewsById(long articleId);
+    void updateViewsById(String articleId);
 
     /**
      * 更新文章点赞数
@@ -54,5 +54,5 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articleId
      * @return
      */
-    int updateApproveCntById(long articleId);
+    int updateApproveCntById(String articleId);
 }

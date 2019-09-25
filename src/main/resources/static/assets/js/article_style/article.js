@@ -584,3 +584,24 @@ function commentPage(laypage, comments, articleId, tpl, timeago) {
         }
     });
 }
+
+function purchaseContent(articleId, hideId) {
+    if (nbv5su === null) {
+        layer.alert("请先登录之后再进行购买！");
+    } else {
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "/article/token/purchase",
+            data: {
+                articleId: articleId,
+                hideId: hideId
+            },
+            success: function (resp) {
+//TODO:统计图还需要增加一个浏览器的
+            }, error: function () {
+                layer.msg("请稍后再试！");
+            }
+        })
+    }
+}

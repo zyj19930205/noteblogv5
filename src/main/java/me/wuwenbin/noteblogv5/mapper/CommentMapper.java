@@ -28,7 +28,7 @@ public interface CommentMapper extends BaseMapper<Comment> {
     IPage<CommentBo> findCommentPage(IPage<CommentBo> page,
                                      @Param("nickname") String nickname,
                                      @Param("clearComment") String clearComment,
-                                     @Param("articleIds") List<Long> articleIds,
+                                     @Param("articleIds") List<String> articleIds,
                                      @Param("enable") boolean enable);
 
     /**

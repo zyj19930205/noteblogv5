@@ -26,7 +26,7 @@ public interface DictService extends IService<Dict> {
      * @param articleId
      * @return
      */
-    List<Dict> findCatesByArticleId(Long articleId);
+    List<Dict> findCatesByArticleId(String articleId);
 
 
     /**
@@ -43,7 +43,7 @@ public interface DictService extends IService<Dict> {
      * @param articleId
      * @return
      */
-    List<Dict> findTagsByArticleId(Long articleId);
+    List<Dict> findTagsByArticleId(String articleId);
 
     /**
      * 查找某种类型的l数据列表
@@ -65,5 +65,5 @@ public interface DictService extends IService<Dict> {
      *
      * @param articleId
      */
-    void deleteArticleRefer(Long articleId);
+    void deleteArticleRefer(String articleId);
 }

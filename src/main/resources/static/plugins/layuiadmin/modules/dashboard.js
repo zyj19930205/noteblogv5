@@ -76,7 +76,7 @@ layui.define(function (exports) {
             //新增的用户量
             {
                 title: {
-                    text: 'url访问统计',
+                    text: '访问统计：PV',
                     x: 'center',
                     textStyle: {
                         fontSize: 14

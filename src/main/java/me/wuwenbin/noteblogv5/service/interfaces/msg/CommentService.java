@@ -22,7 +22,7 @@ public interface CommentService extends IService<Comment> {
      * @param enable
      * @return
      */
-    IPage<CommentBo> findCommentPage(IPage<CommentBo> page, String nickname, String clearComment, List<Long> articleIds, boolean enable);
+    IPage<CommentBo> findCommentPage(IPage<CommentBo> page, String nickname, String clearComment, List<String> articleIds, boolean enable);
 
     /**
      * 查找最新的评论
