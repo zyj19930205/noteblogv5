@@ -56,7 +56,7 @@ layui.define(['laytpl', 'timeago', 'laypage'], function (exports) {
         '<div class="layui-col-xs10 comment-content" style="color: #929292;">' +
         '<label>{{item.nickname}} (#{{item.id}}</label>,' +
         '<span class="timeago" datetime="{{ nbv5front.timeAgo(item.post) }}"></span>)：' +
-        '<span class="comment-txt" style="color: #000;line-height: 24px;">{{item.comment}}</span>' +
+        '<span class="comment-txt" style="color: #000;line-height: 24px;word-break: break-all;">{{item.comment}}</span>' +
         '<a class="reply" data-comment-id="{{item.id}}" style="display: none;">回复</a> ' +
         '</div>' +
         '</div>' +
@@ -334,7 +334,7 @@ function messagePage(laypage, messages, tpl, timeago) {
                         '<div class="layui-col-xs11 comment-content">' +
                         '<label>{{item.nickname}} (#{{item.id}}</label>,' +
                         '<span class="timeago" datetime="{{ nbv5front.timeAgo(item.post) }}"></span>)：' +
-                        '<span class="comment-txt">{{item.comment}}</span>' +
+                        '<span class="comment-txt" style="color: #000;line-height: 24px;word-break: break-all;">{{item.comment}}</span>' +
                         '<a class="reply" data-comment-id="{{item.id}}" style="display: none;">回复</a> ' +
                         '</div>' +
                         '</div>' +
