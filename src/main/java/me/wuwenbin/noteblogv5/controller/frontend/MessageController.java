@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.wuwenbin.noteblogv5.constant.DictGroup;
+import me.wuwenbin.noteblogv5.constant.NBV5;
 import me.wuwenbin.noteblogv5.controller.common.BaseController;
 import me.wuwenbin.noteblogv5.model.ResultBean;
 import me.wuwenbin.noteblogv5.model.bo.MessageBo;
@@ -97,7 +98,7 @@ public class MessageController extends BaseController {
                 keywords.forEach(
                         kw -> message.setComment(message.getComment().replace(kw.getName(), StrUtil.repeat("*", kw.getName().length()))));
                 if (messageService.save(message)) {
-                    if ("1".equals(paramService.findByName("message_mail_notice_onoff").getValue())) {
+                    if ("1".equals(paramService.findByName(NBV5.MESSAGE_MAIL_NOTICE_ONOFF).getValue())) {
                         mailService.sendMessageMail(basePath(request), message.getComment());
                     }
                     return ResultBean.ok("发表评论成功");

@@ -1,7 +1,7 @@
 package me.wuwenbin.noteblogv5.service.impl.log;
 
 import me.wuwenbin.noteblogv5.mapper.LogMapper;
-import me.wuwenbin.noteblogv5.model.bo.EchartsIpBo;
+import me.wuwenbin.noteblogv5.model.bo.EchartsBo;
 import me.wuwenbin.noteblogv5.model.bo.EchartsUrlBo;
 import me.wuwenbin.noteblogv5.service.interfaces.log.LogService;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,18 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public List<EchartsIpBo> ipSummary() {
+    public List<EchartsBo> ipSummary() {
         return logMapper.ipSummary();
     }
 
     @Override
     public List<EchartsUrlBo> urlSummary() {
         return logMapper.urlSummary();
+    }
+
+    @Override
+    public List<EchartsBo> browserSummary() {
+        return logMapper.browserSummary();
     }
 
     @Override

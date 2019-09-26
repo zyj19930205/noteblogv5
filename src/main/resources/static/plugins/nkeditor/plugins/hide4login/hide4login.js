@@ -22,7 +22,7 @@ KindEditor.plugin('hide4login', function (K) {
                     var finalHtml = "<div data-hide='login' " +
                         "style='margin-bottom: 10px;padding: 15px; line-height: 22px;" +
                         "border-left: 5px solid #F44336;border-radius: 0 2px 2px 0;background-color: #f2f2f2;'>"
-                        + hideCommentEditor.txt.html() + "</div><br/>";
+                        + hideCommentEditor.txt.html() + "</div>";
                     editor.appendHtml(finalHtml);
                     dialog.remove();
                 }

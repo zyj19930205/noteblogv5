@@ -45,8 +45,59 @@ layui.define(function (exports) {
             items.push(urlSummary[i].item);
             cnts.push(urlSummary[i].cnt);
         }
+
+        var browsers = [];
+        for (var i = 0; i < browserSummary.length; i++) {
+            browsers.push(browserSummary[i].name);
+        }
         var echartsApp = [], options = [
-            //访客浏览器分布
+            //访客浏览器
+            {
+                title: {
+                    text: '访客浏览器',
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 14
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: browsers
+                },
+                series: [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: browserSummary
+                    }
+                ]
+            },
+            //访客浏IP分布
             {
                 title: {
                     text: '访客IP分部',
@@ -72,7 +123,6 @@ layui.define(function (exports) {
                     data: ipSummary
                 }]
             },
-
             //新增的用户量
             {
                 title: {

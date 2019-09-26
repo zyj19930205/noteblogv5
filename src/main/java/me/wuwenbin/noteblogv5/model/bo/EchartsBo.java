@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-public class EchartsIpBo implements Serializable {
+public class EchartsBo implements Serializable {
 
     private String name;
     private String value;

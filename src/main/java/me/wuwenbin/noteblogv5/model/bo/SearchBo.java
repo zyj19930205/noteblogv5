@@ -17,7 +17,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class SearchBo implements Serializable {
 
-    private Long id;
+    private String id;
     /**
      * 文章还是笔记
      */

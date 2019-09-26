@@ -11,8 +11,10 @@ import me.wuwenbin.noteblogv5.controller.common.BaseController;
 import me.wuwenbin.noteblogv5.model.ResultBean;
 import me.wuwenbin.noteblogv5.model.bo.CommentBo;
 import me.wuwenbin.noteblogv5.model.entity.Article;
+import me.wuwenbin.noteblogv5.model.entity.User;
 import me.wuwenbin.noteblogv5.service.interfaces.UserService;
 import me.wuwenbin.noteblogv5.service.interfaces.content.ArticleService;
+import me.wuwenbin.noteblogv5.service.interfaces.content.HideService;
 import me.wuwenbin.noteblogv5.service.interfaces.dict.DictService;
 import me.wuwenbin.noteblogv5.service.interfaces.msg.CommentService;
 import org.springframework.stereotype.Controller;
@@ -36,12 +38,16 @@ public class ArticleController extends BaseController {
     private final DictService dictService;
     private final UserService userService;
     private final CommentService commentService;
+    private final HideService hideService;
 
-    public ArticleController(ArticleService articleService, DictService dictService, UserService userService, CommentService commentService) {
+    public ArticleController(ArticleService articleService, DictService dictService,
+                             UserService userService, CommentService commentService,
+                             HideService hideService) {
         this.articleService = articleService;
         this.dictService = dictService;
         this.userService = userService;
         this.commentService = commentService;
+        this.hideService = hideService;
     }
 
     @GetMapping("/{aId}")
@@ -96,4 +102,17 @@ public class ArticleController extends BaseController {
         return handle(res, "感谢您的点赞！", "请稍后再试！");
     }
 
+    @PostMapping("/token/purchase")
+    @ResponseBody
+    public ResultBean purchaseHide(@RequestParam String articleId,
+                                   @RequestParam String hideId, HttpServletRequest request) {
+        User purchaseUser = getSessionUser(request);
+        if (purchaseUser == null) {
+            return ResultBean.error("请先登录再进行购买操作！");
+        } else {
+            long userId = purchaseUser.getId();
+            int cnt = hideService.purchaseArticleHideContent(articleId, hideId, userId);
+            return handle(cnt == 1, "购买成功！", "购买失败！");
+        }
+    }
 }

@@ -66,7 +66,7 @@ var nbv5front = {
         })
     }
 
-    , miniHeader: function (bodyId) {
+    ,  miniHeader: function (bodyId) {
         var $body = $("#" + bodyId);
         window._justResult = $body.offset().top - $(window).scrollTop();
         nbv5front.animateNav($body);
@@ -77,17 +77,19 @@ var nbv5front = {
 
     , animateNav: function ($body) {
         var result = $body.offset().top - $(window).scrollTop();
-        if (result >= -50) {
-            if (result >= window._justResult) {
-                $("body.simple .header").removeClass("header-small");
+        if (!layui.device().ios) {
+            if (result >= -50) {
+                if (result >= window._justResult) {
+                    $("body.simple .header").removeClass("header-small");
+                } else {
+                    $("body.simple .header").addClass("header-small");
+                }
             } else {
-                $("body.simple .header").addClass("header-small");
-            }
-        } else {
-            if (result <= window._justResult) {
-                $("body.simple .header").addClass("header-small");
-            } else {
-                $("body.simple .header").removeClass("header-small");
+                if (result <= window._justResult) {
+                    $("body.simple .header").addClass("header-small");
+                } else {
+                    $("body.simple .header").removeClass("header-small");
+                }
             }
         }
         return result;
@@ -105,21 +107,23 @@ var nbv5front = {
     , animateTitle: function ($body) {
         var result = $body.offset().top - $(window).scrollTop();
         var scollHeight = $('body').scrollTop() + $('html').scrollTop();
-        if (result >= -50) {
-            if (result >= window._justTitleResult) {
-                $("div.top-title").removeClass("top0");
-            } else {
-                if (scollHeight >= 200) {
-                    $("div.top-title").addClass("top0");
-                }
-            }
-        } else {
-            if (result <= window._justTitleResult) {
-                if (scollHeight >= 200) {
-                    $("div.top-title").addClass("top0");
+        if (!layui.device().ios) {
+            if (result >= -50) {
+                if (result >= window._justTitleResult) {
+                    $("div.top-title").removeClass("top0");
+                } else {
+                    if (scollHeight >= 200) {
+                        $("div.top-title").addClass("top0");
+                    }
                 }
             } else {
-                $("div.top-title").removeClass("top0");
+                if (result <= window._justTitleResult) {
+                    if (scollHeight >= 200) {
+                        $("div.top-title").addClass("top0");
+                    }
+                } else {
+                    $("div.top-title").removeClass("top0");
+                }
             }
         }
         return result;
@@ -134,7 +138,9 @@ var nbv5front = {
     }
 
     , timeAgo: function (date) {
-        return new Date(date).format('yyyy-MM-dd HH:mm:ss');
+        date = date.replace(/\.\d+/, ' ');
+        date = date.replace(/T/g, ' ');
+        return date;
     }
 
     , simpleDate: function (date) {

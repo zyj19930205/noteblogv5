@@ -2,6 +2,7 @@ package me.wuwenbin.noteblogv5.service.impl.property;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -94,6 +95,24 @@ public class ParamServiceImpl extends ServiceImpl<ParamMapper, Param> implements
             CacheUtils.removeParamCache(NBV5.UPLOAD_TYPE);
             final String type = "0".equalsIgnoreCase(value) ? UploadConstant.Method.LOCAL.name() : UploadConstant.Method.QINIU.name();
             paramMapper.updateValueByName(NBV5.UPLOAD_TYPE, type);
+        }
+        if (name.equalsIgnoreCase(NBV5.COMMENT_MAIL_NOTICE_ONOFF)
+                || name.equalsIgnoreCase(NBV5.MESSAGE_MAIL_NOTICE_ONOFF)) {
+            String adminEmail = userMapper.selectOne(Wrappers.<User>query().eq("role", RoleEnum.ADMIN.getValue())).getEmail();
+            if (StrUtil.isEmpty(adminEmail)) {
+                return ResultBean.error("请先设置管理员邮箱！");
+            } else {
+                String host = paramMapper.selectOne(Wrappers.<Param>query().eq("name", NBV5.MAIL_SMPT_SERVER_ADDR)).getValue();
+                String port = paramMapper.selectOne(Wrappers.<Param>query().eq("name", NBV5.MAIL_SMPT_SERVER_PORT)).getValue();
+                String from = paramMapper.selectOne(Wrappers.<Param>query().eq("name", NBV5.MAIL_SERVER_ACCOUNT)).getValue();
+                String user = paramMapper.selectOne(Wrappers.<Param>query().eq("name", NBV5.MAIL_SENDER_NAME)).getValue();
+                String pass = paramMapper.selectOne(Wrappers.<Param>query().eq("name", NBV5.MAIL_SERVER_PASSWORD)).getValue();
+                if (StrUtil.isEmpty(host) || StrUtil.isEmpty(port)
+                        || StrUtil.isEmpty(from) || StrUtil.isEmpty(user)
+                        || StrUtil.isEmpty(pass)) {
+                    return ResultBean.error("请先设置完整发送邮件服务器信息！");
+                }
+            }
         }
         return update(name, value);
     }

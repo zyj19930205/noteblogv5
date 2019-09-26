@@ -25,4 +25,14 @@ public interface HideService extends IService<Hide> {
      * @return
      */
     boolean userIsBought(String articleId, long userId, String hideId);
+
+    /**
+     * 购买文章隐藏内容
+     *
+     * @param articleId
+     * @param hideId
+     * @param userId
+     * @return
+     */
+    int purchaseArticleHideContent(String articleId, String hideId, Long userId);
 }

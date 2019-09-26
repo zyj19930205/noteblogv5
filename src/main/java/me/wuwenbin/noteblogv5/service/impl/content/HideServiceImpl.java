@@ -33,4 +33,10 @@ public class HideServiceImpl extends ServiceImpl<HideMapper, Hide> implements Hi
         String c = jdbcTemplate.queryForObject(sql, String.class, articleId, userId, hideId);
         return c != null && Integer.parseInt(c) == 1;
     }
+
+    @Override
+    public int purchaseArticleHideContent(String articleId, String hideId, Long userId) {
+        String sql = "insert into refer_hide_user_purchase(article_id,hide_id,user_id) values (?,?,?)";
+        return jdbcTemplate.update(sql, articleId, hideId, userId);
+    }
 }

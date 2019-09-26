@@ -40,6 +40,8 @@ layui.define(['element', 'form', 'upload'], function (exports) {
         }, function (resp) {
             if (resp.code === NBV5.status.ok) {
                 layer.tips('修改成功！', data.othis);
+            } else {
+                layer.msg(resp.message);
             }
         })
     });

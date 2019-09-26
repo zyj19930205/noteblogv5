@@ -4,6 +4,7 @@ package me.wuwenbin.noteblogv5.controller.frontend;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HtmlUtil;
 import me.wuwenbin.noteblogv5.constant.DictGroup;
+import me.wuwenbin.noteblogv5.constant.NBV5;
 import me.wuwenbin.noteblogv5.controller.common.BaseController;
 import me.wuwenbin.noteblogv5.model.ResultBean;
 import me.wuwenbin.noteblogv5.model.entity.Article;
@@ -77,7 +78,7 @@ public class CommentController extends BaseController {
                 keywords.forEach(
                         kw -> comment.setComment(comment.getComment().replace(kw.getName(), StrUtil.repeat("*", kw.getName().length()))));
                 if (commentService.save(comment)) {
-                    if ("1".equals(paramService.findByName("comment_mail_notice_onoff").getValue())) {
+                    if ("1".equals(paramService.findByName(NBV5.COMMENT_MAIL_NOTICE_ONOFF).getValue())) {
                         mailService.sendNoticeMail(basePath(request), articleService.getById(comment.getArticleId()), comment.getComment());
                     }
                     return ResultBean.ok("发表评论成功");

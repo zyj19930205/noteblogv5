@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.wuwenbin.noteblogv5.mapper.LogMapper">
 
-    <select id="ipSummary" resultType="me.wuwenbin.noteblogv5.model.bo.EchartsIpBo">
+    <select id="ipSummary" resultType="me.wuwenbin.noteblogv5.model.bo.EchartsBo">
         SELECT CONCAT(ip_addr, '，', ip_info) AS name, COUNT(*) AS value
         FROM nb_log
         GROUP BY ip_addr, ip_info
@@ -16,6 +16,12 @@
         WHERE DATE_FORMAT(l.time, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
         GROUP BY DATE_FORMAT(l.time, '%Y-%m-%d')
         ORDER BY l.time DESC
+    </select>
+
+    <select id="browserSummary" resultType="me.wuwenbin.noteblogv5.model.bo.EchartsBo">
+        SELECT browser AS name, COUNT(1) as value
+        FROM nb_log
+        GROUP BY browser
     </select>
 
     <select id="todayVisit" resultType="long">

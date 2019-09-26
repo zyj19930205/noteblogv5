@@ -2,7 +2,7 @@ package me.wuwenbin.noteblogv5.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.wuwenbin.noteblogv5.annotation.Mapper;
-import me.wuwenbin.noteblogv5.model.bo.EchartsIpBo;
+import me.wuwenbin.noteblogv5.model.bo.EchartsBo;
 import me.wuwenbin.noteblogv5.model.bo.EchartsUrlBo;
 import me.wuwenbin.noteblogv5.model.entity.Log;
 
@@ -19,7 +19,7 @@ public interface LogMapper extends BaseMapper<Log> {
      *
      * @return
      */
-    List<EchartsIpBo> ipSummary();
+    List<EchartsBo> ipSummary();
 
     /**
      * url统计
@@ -27,6 +27,13 @@ public interface LogMapper extends BaseMapper<Log> {
      * @return
      */
     List<EchartsUrlBo> urlSummary();
+
+    /**
+     * 浏览器统计
+     *
+     * @return
+     */
+    List<EchartsBo> browserSummary();
 
     /**
      * 今日访问

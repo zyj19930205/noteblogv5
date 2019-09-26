@@ -32,7 +32,7 @@ layui.define(['laytpl', 'timeago', 'laypage'], function (exports) {
         '<input type="hidden" name="replyId">' +
         '<input type="hidden" name="userId" value="{{d.nbv5su!=null?d.nbv5su.id:""}}">' +
         '<input type="hidden" name="nickname" value="{{d.nbv5su!=null?d.nbv5su.nickname:""}}">' +
-        '<textarea name="comment" required lay-verify="required" placeholder="{{d.settings.message_onoff == "1"?"输入你想说的话":"未开放留言功能"}}" ' +
+        '<textarea id="message-reply" name="comment" required lay-verify="required" placeholder="{{d.settings.message_onoff == "1"?"输入你想说的话":"未开放留言功能"}}" ' +
         '       {{# if( d.settings.message_onoff == "0"){ }}' +
         ' disabled="disabled"' +
         '       {{# } }}' +
@@ -50,10 +50,10 @@ layui.define(['laytpl', 'timeago', 'laypage'], function (exports) {
         '<div id="message-list">' +
         '{{# layui.each(d.messages.records, function(index, item){ }}' +
         '<div class="layui-row comment-html">' +
-        '<div class="layui-col-xs1 layui-user-avatar">' +
-        '<img src="{{item.avatar}}" class="layui-circle">' +
+        '<div class="layui-col-xs1 layui-user-avatar" style="min-width: 45px;">' +
+        '<img src="{{item.avatar}}" class="layui-circle" style="min-width: 40px;display: inline-block;">' +
         '</div>' +
-        '<div class="layui-col-xs11 comment-content" style="color: #929292;">' +
+        '<div class="layui-col-xs10 comment-content" style="color: #929292;">' +
         '<label>{{item.nickname}} (#{{item.id}}</label>,' +
         '<span class="timeago" datetime="{{ nbv5front.timeAgo(item.post) }}"></span>)：' +
         '<span class="comment-txt" style="color: #000;line-height: 24px;">{{item.comment}}</span>' +
@@ -184,7 +184,8 @@ function stickySideBar() {
             }
             sticky = new hcSticky("#affix-side", {
                 stickTo: '#main-body',
-                top: 15
+                top: 15,
+                queries: {980: {disable: true}}
             });
             //下滚
         } else {
@@ -193,7 +194,8 @@ function stickySideBar() {
             }
             sticky = new hcSticky("#affix-side", {
                 stickTo: '#main-body',
-                top: 65
+                top: 65,
+                queries: {980: {disable: true}}
             });
             //上滚
         }
@@ -249,6 +251,7 @@ function replyOne(nbv5su) {
         $("input[name=replyId]").val(replyId);
         $("input[name=nickname]").val(userTxt);
         $("textarea[name=comment]").attr("placeholder", "回复@" + userTxt + "): ");
+        location.href = "#message-reply";
         $("#cancelReply").css("display", "inline-block");
     });
 }
@@ -325,7 +328,7 @@ function messagePage(laypage, messages, tpl, timeago) {
                 }, function (cs) {
                     var pageTpl = '{{# layui.each(d.records, function(index, item){ }}' +
                         '<div class="layui-row comment-html">' +
-                        '<div class="layui-col-xs1 layui-user-avatar">' +
+                        '<div class="layui-col-xs1 layui-user-avatar" style="min-width: 45px;">' +
                         '<img src="{{item.avatar}}" class="layui-circle">' +
                         '</div>' +
                         '<div class="layui-col-xs11 comment-content">' +

@@ -43,7 +43,7 @@ public interface ArticleService extends IService<Article> {
     String HIDE_COMMENT_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容回复可见，" +
             "<a class=\"layui-text\" href=\"#comment-list\">点我回复</a></blockquote><br/>";
     String HIDE_PURCHASE_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容需购买，" +
-            "<a class=\"layui-text\" onclick=\"purchaseContent({articleId},{hideId});\">点我购买</a></blockquote><br/>";
+            "<a class=\"layui-text\" onclick=\"purchaseContent('{articleId}','{hideId}');\">点我购买</a></blockquote><br/>";
     String HIDE_LOGIN_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容登录之后可见，" +
             "<a class=\"layui-text\" href=\"/login?t={currentTimes}\" target=\"_blank\">点我登录</a></blockquote><br/>";
 
@@ -144,7 +144,7 @@ public interface ArticleService extends IService<Article> {
     default void handleHideArticle(Article article) {
         HideService hideService = NbUtils.getBean(HideService.class);
         String contentHtml = article.getContent();
-        contentHtml = contentHtml.replace("<br />", "<br>");
+        contentHtml = contentHtml.replace(" />", ">");
         Document document = Jsoup.parse(contentHtml);
         document.outputSettings().prettyPrint(false);
         JXDocument doc = JXDocument.create(document);
@@ -172,19 +172,31 @@ public interface ArticleService extends IService<Article> {
         List<JXNode> hidePurchases = doc.selN(StrUtil.format("//div[@data-hide='{}']", HIDE_PURCHASE));
         for (JXNode purchase : hidePurchases) {
             String html = purchase.asElement().outerHtml();
+            String hideId = purchase.asElement().attr("data-hid");
+            if (StrUtil.isEmptyOrUndefined(hideId)) {
+                hideId = IdUtil.objectId();
+                contentHtml = contentHtml.replace("data-hid=\"\"", StrUtil.format("data-hid=\"{}\"", hideId));
+                html = html.replace("data-hid=\"\"", StrUtil.format("data-hid=\"{}\"", hideId));
+            }
             Map<String, Object> hideMap = new HashMap<>(4);
-            String hideId = IdUtil.objectId();
             hideMap.put("hideId", hideId);
             hideMap.put("hideType", HIDE_PURCHASE);
             hideMap.put("articleId", article.getId());
             String replacement = StrUtil.format(HIDE_PURCHASE_REPLACEMENT, hideMap);
             contentHtml = contentHtml.replace(html, replacement);
-            Hide hide = Hide.builder()
-                    .id(hideId)
-                    .articleId(article.getId())
-                    .hideType(HIDE_PURCHASE)
-                    .hideHtml(html).build();
-            hideService.save(hide);
+            if (hideService.getById(hideId) == null) {
+                Hide hide = Hide.builder()
+                        .id(hideId)
+                        .articleId(article.getId())
+                        .hideType(HIDE_PURCHASE)
+                        .hideHtml(html).build();
+                hideService.save(hide);
+            } else {
+                hideService.update(
+                        Wrappers.<Hide>update()
+                                .set("hide_html", html)
+                                .eq("id", hideId).eq("article_id", article.getId()).eq("hide_type", HIDE_PURCHASE));
+            }
             article.setContent(contentHtml);
         }
 
@@ -218,7 +230,7 @@ public interface ArticleService extends IService<Article> {
      */
     default void handleShowArticle(Article article, User visitingUser) {
         String contentHtml = article.getContent();
-        contentHtml = contentHtml.replace("<br />", "<br>");
+        contentHtml = contentHtml.replace(" />", ">");
         Document document = Jsoup.parse(contentHtml);
         document.outputSettings().prettyPrint(false);
         JXDocument doc = JXDocument.create(document);

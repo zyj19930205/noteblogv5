@@ -199,7 +199,7 @@ layui.define(['laytpl', 'timeago', 'laypage'], function (exports) {
         '<div id="comment-list">' +
         '{{# layui.each(d.comments.records, function(index, item){ }}' +
         '<div class="layui-row comment-html">' +
-        '<div class="layui-col-xs1 layui-user-avatar">' +
+        '<div class="layui-col-xs1 layui-user-avatar" style="min-width: 45px;">' +
         '<img src="{{item.avatar}}" class="layui-circle">' +
         '</div>' +
         '<div class="layui-col-xs11 comment-content" style="color: #929292;">' +
@@ -564,7 +564,7 @@ function commentPage(laypage, comments, articleId, tpl, timeago) {
                 }, function (cs) {
                     var pageTpl = '{{# layui.each(d.records, function(index, item){ }}' +
                         '<div class="layui-row comment-html">' +
-                        '<div class="layui-col-xs1 layui-user-avatar">' +
+                        '<div class="layui-col-xs1 layui-user-avatar" style="min-width: 45px;">' +
                         '<img src="{{item.avatar}}" class="layui-circle">' +
                         '</div>' +
                         '<div class="layui-col-xs11 comment-content">' +
@@ -586,22 +586,23 @@ function commentPage(laypage, comments, articleId, tpl, timeago) {
 }
 
 function purchaseContent(articleId, hideId) {
-    if (nbv5su === null) {
-        layer.alert("请先登录之后再进行购买！");
-    } else {
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            url: "/article/token/purchase",
-            data: {
-                articleId: articleId,
-                hideId: hideId
-            },
-            success: function (resp) {
-//TODO:统计图还需要增加一个浏览器的
-            }, error: function () {
-                layer.msg("请稍后再试！");
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        url: "/article/token/purchase",
+        data: {
+            articleId: articleId,
+            hideId: hideId
+        },
+        success: function (resp) {
+            layer.msg(resp.message);
+            if (resp.code === 200) {
+                setTimeout(function () {
+                    location.reload();
+                }, 888);
             }
-        })
-    }
+        }, error: function () {
+            layer.msg("请稍后再试！");
+        }
+    })
 }

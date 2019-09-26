@@ -34,6 +34,12 @@ public interface NBV5 {
     String MAIL_SERVER_PASSWORD = "mail_server_password";
 
     /**
+     * 邮件通知
+     */
+    String COMMENT_MAIL_NOTICE_ONOFF = "comment_mail_notice_onoff";
+    String MESSAGE_MAIL_NOTICE_ONOFF = "message_mail_notice_onoff";
+
+    /**
      * 信息板显示
      */
     String INFO_LABEL_NICKNAME = "info_label_nickname";
@@ -87,8 +93,6 @@ public interface NBV5 {
      */
     String STATISTICS_ONOFF = "statistics_onoff";
     String IS_OPEN_OSS_UPLOAD = "is_open_oss_upload";
-
-
 
 
 }

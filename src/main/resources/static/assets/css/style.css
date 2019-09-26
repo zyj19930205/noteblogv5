@@ -29,6 +29,10 @@ a:hover {
     color: #F44336;
 }
 
+body {
+    -webkit-overflow-scrolling: auto !important;
+}
+
 .nb-theme-color {
     color: #F44336 !important;
 }
@@ -598,9 +602,6 @@ body:before {
 .layui-field-title .layui-field-box.has-pic {
     padding: 15px 0 0 0 !important;
 }
-
-
-
 
 
 .blog-base-info span {
