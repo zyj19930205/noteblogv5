@@ -9,6 +9,18 @@ import me.wuwenbin.noteblogv5.model.entity.Article;
  */
 public interface MailService {
 
+
+    /**
+     * 发送邮件
+     *
+     * @param subject    邮件主题
+     * @param targetMail 发送给谁，目标邮件
+     * @param content    邮件内容
+     * @param isHtml     是否发送富文本
+     * @return
+     */
+    void sendMail(String subject, String targetMail, String content, boolean isHtml);
+
     /**
      * 发送评论通知邮件
      *
@@ -25,4 +37,11 @@ public interface MailService {
      * @param message
      */
     void sendMessageMail(String site, String message);
+
+    /**
+     * 发送注册验证邮件
+     *
+     * @param email
+     */
+    void sendMailCode(String email);
 }

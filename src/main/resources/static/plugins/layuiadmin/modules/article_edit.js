@@ -154,7 +154,7 @@ layui.define(['element', 'form', 'layer', 'upload', 'formSelects', 'inputTags'],
                     'formatblock', 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold',
                     'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'image', 'graft',
                     'insertfile', 'table', 'hr', 'emoticons', 'pagebreak',
-                    'link', 'unlink', 'about', '|', 'hide4comment', 'hide4login', 'hide4purchase'
+                    'link', 'unlink', 'about', 'br', '|', 'hide4comment', 'hide4login', 'hide4purchase'
                 ],
                 uploadJson: '/management/upload?reqType=nk',
                 dialogOffset: 0, //对话框距离页面顶部的位置，默认为0居中，
@@ -226,7 +226,7 @@ $(function () {
                 'formatblock', 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold',
                 'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'image', 'graft',
                 'insertfile', 'table', 'hr', 'emoticons', 'pagebreak',
-                'link', 'unlink', 'about', '|', 'hide4comment', 'hide4login', 'hide4purchase'
+                'link', 'unlink', 'about', 'br', '|', 'hide4comment', 'hide4login', 'hide4purchase'
             ],
             uploadJson: '/management/upload?reqType=nk',
             dialogOffset: 0, //对话框距离页面顶部的位置，默认为0居中，

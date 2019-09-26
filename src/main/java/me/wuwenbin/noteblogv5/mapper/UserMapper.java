@@ -3,6 +3,7 @@ package me.wuwenbin.noteblogv5.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.wuwenbin.noteblogv5.annotation.Mapper;
 import me.wuwenbin.noteblogv5.model.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * created by Wuwenbin on 2019-08-05 at 13:37
@@ -18,4 +19,13 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     long findTodayUser();
+
+    /**
+     * 统计普通注册用户role
+     *
+     * @param email
+     * @param username
+     * @return
+     */
+    int countRegUserEmailAndUsername(@Param("email") String email, @Param("username") String username);
 }

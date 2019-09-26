@@ -10,4 +10,10 @@
         where date_format(create_date, '%Y-%m-%d') = date_format(curdate(), '%Y-%m-%d')
     </select>
 
+    <select id="countRegUserEmailAndUsername" resultType="int">
+        select count(1)
+        from nb_user
+        where email = #{email}
+           or username = #{username}
+    </select>
 </mapper>

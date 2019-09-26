@@ -35,6 +35,7 @@ statistics_onoff = 是否开启统计，开启可能会消耗服务器资源（�
 is_open_oss_upload = 是否开启云存储,0
 comment_mail_notice_onoff = 是否开启新评论邮件通知,0
 message_mail_notice_onoff = 是否开启新留言通知,0
+user_simple_reg_onoff = 是否开启用户注册,0
 
 [2]
 website_fontawesome = 网站的字体logo图标,fa fa-graduation-cap

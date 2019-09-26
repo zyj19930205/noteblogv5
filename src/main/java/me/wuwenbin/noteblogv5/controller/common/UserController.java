@@ -1,7 +1,9 @@
 package me.wuwenbin.noteblogv5.controller.common;
 
+import cn.hutool.cache.Cache;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.code.kaptcha.Constants;
 import me.wuwenbin.noteblogv5.constant.NBV5;
 import me.wuwenbin.noteblogv5.model.ResultBean;
@@ -11,6 +13,8 @@ import me.wuwenbin.noteblogv5.model.bo.login.SimpleLoginData;
 import me.wuwenbin.noteblogv5.model.entity.Param;
 import me.wuwenbin.noteblogv5.model.entity.User;
 import me.wuwenbin.noteblogv5.service.interfaces.LoginService;
+import me.wuwenbin.noteblogv5.service.interfaces.UserService;
+import me.wuwenbin.noteblogv5.service.interfaces.mail.MailService;
 import me.wuwenbin.noteblogv5.service.interfaces.property.ParamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -27,21 +31,30 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController extends BaseController {
 
     private static final String MANAGEMENT_INDEX = "/management/index";
-    private static final String FRONTEND_INDEX = "/";
 
     private final HttpServletRequest request;
     private final ParamService paramService;
+    private final MailService mailService;
+    private final UserService userService;
+    private final Cache<String, String> codeCache;
+
     private final LoginService<ResultBean, QqLoginData> qqLoginService;
     private final LoginService<ResultBean, GithubLoginData> githubLoginService;
     private final LoginService<ResultBean, SimpleLoginData> simpleLoginService;
 
     public UserController(HttpServletRequest request, ParamService paramService,
-                          LoginService<ResultBean, QqLoginData> qqLoginService, LoginService<ResultBean, GithubLoginData> githubLoginService, LoginService<ResultBean, SimpleLoginData> simpleLoginService) {
+                          LoginService<ResultBean, QqLoginData> qqLoginService,
+                          LoginService<ResultBean, GithubLoginData> githubLoginService,
+                          LoginService<ResultBean, SimpleLoginData> simpleLoginService,
+                          MailService mailService, Cache<String, String> codeCache, UserService userService) {
         this.request = request;
         this.paramService = paramService;
         this.qqLoginService = qqLoginService;
         this.githubLoginService = githubLoginService;
         this.simpleLoginService = simpleLoginService;
+        this.mailService = mailService;
+        this.codeCache = codeCache;
+        this.userService = userService;
     }
 
     @GetMapping("/login")
@@ -58,11 +71,66 @@ public class UserController extends BaseController {
             ModelAndView mav = new ModelAndView("login");
             Param qqParam = paramService.findByName(NBV5.QQ_APP_ID);
             Param githubParam = paramService.findByName(NBV5.GITHUB_CLIENT_ID);
+            Param reg = paramService.findByName(NBV5.USER_SIMPLE_REG_ONOFF);
             mav.addObject("isOpenQqLogin",
                     (qqParam != null && StrUtil.isNotEmpty(qqParam.getValue())));
             mav.addObject("isOpenGithubLogin",
                     (githubParam != null && StrUtil.isNotEmpty(githubParam.getValue())));
+            mav.addObject("isOpenRegister",
+                    (reg != null && "1".equals(reg.getValue())));
             return mav;
+        }
+    }
+
+    @GetMapping("/reg")
+    public ModelAndView register() {
+        Param reg = paramService.getOne(Wrappers.<Param>query().eq("name", NBV5.USER_SIMPLE_REG_ONOFF));
+        boolean isOpenRegister = reg != null && "1".equals(reg.getValue());
+        request.setAttribute("isOpenRegister", isOpenRegister);
+        if (isOpenRegister) {
+            return new ModelAndView("reg");
+        } else {
+            return new ModelAndView(new RedirectView("login"));
+        }
+    }
+
+    @PostMapping("/sendMailCode")
+    @ResponseBody
+    public ResultBean sendMailCode(String email) {
+        try {
+            mailService.sendMailCode(email);
+            return ResultBean.ok("发送成功，请在您的邮箱中查收！");
+        } catch (Exception e) {
+            return ResultBean.error("发送验证码发生错误，错误信息：" + e.getMessage());
+        }
+    }
+
+    @PostMapping("/registration")
+    @ResponseBody
+    public ResultBean doRegister(String nbv5regUsername, String nbv5regPassword, String nbv5regMail, String mailCode, String nbv5regNickname) {
+        int min = 4, minPass = 6, max = 20;
+        if (StringUtils.isEmpty(nbv5regUsername) || StringUtils.isEmpty(nbv5regPassword)
+                || StringUtils.isEmpty(mailCode) || StringUtils.isEmpty(nbv5regNickname)) {
+            return ResultBean.error("所填信息不完整！");
+        } else if (nbv5regUsername.length() < min || nbv5regUsername.length() > max
+                || nbv5regPassword.length() < minPass) {
+            return ResultBean.error("所填信息不规范！");
+        } else {
+            String sessionMailCode = codeCache.get(nbv5regMail + "-" + NBV5.MAIL_CODE_KEY);
+            if (mailCode.equalsIgnoreCase(sessionMailCode)) {
+                if (userService.countEmailAndUsername(nbv5regMail, nbv5regUsername) == 0) {
+                    try {
+                        int c = userService.userRegister(nbv5regUsername, nbv5regPassword, nbv5regMail, nbv5regNickname);
+                        return handle(c == 1, "注册成功！", "注册失败！");
+                    } catch (Exception e) {
+                        return ResultBean.error("注册失败，错误信息：" + e.getMessage());
+                    }
+                } else {
+                    return ResultBean.error("已存在此邮箱/账号，请勿重复注册！");
+                }
+            } else {
+                return ResultBean.error("注册失败，邮箱验证码错误或过期！");
+            }
         }
     }
 

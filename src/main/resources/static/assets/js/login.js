@@ -77,13 +77,11 @@ layui.use(['form', 'jquery', 'sliderVerify'], function () {
                     setTimeout(function () {
                         location.href = NBV5.url.manage_index;
                     }, 1000);
-                } else if (resp.code === -1) {
-                    location.reload();
-                    slider.reset();
                 } else {
-                    slider.reset();
-                    $("#NB-user-vercode").trigger("click");
                     layer.msg("登录失败，" + resp.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000)
                 }
             });
         } else {

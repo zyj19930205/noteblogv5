@@ -38,7 +38,27 @@ public interface UserService extends IService<User> {
 
     /**
      * 统计今日用户数量
+     *
      * @return
      */
     long findTodayUser();
+
+    /**
+     * 统计邮箱和用户名的数量
+     *
+     * @param email
+     * @param username
+     * @return
+     */
+    int countEmailAndUsername(String email, String username);
+
+    /**
+     * 注册用户
+     *
+     * @param username
+     * @param password
+     * @param email
+     * @param nickname
+     */
+    int userRegister(String username, String password, String email, String nickname);
 }

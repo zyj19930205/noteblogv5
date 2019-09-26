@@ -14,6 +14,11 @@ public interface NBV5 {
     String INIT_STATUS = "init_status";
 
     /**
+     * 网站标题
+     */
+    String WEBSITE_TITLE ="website_title";
+
+    /**
      * 上传文件夹参数key
      */
     String APP_UPLOAD_PATH = "app.upload.path";
@@ -34,10 +39,16 @@ public interface NBV5 {
     String MAIL_SERVER_PASSWORD = "mail_server_password";
 
     /**
+     * 发送验证码的key
+     */
+    String MAIL_CODE_KEY = "sendMailCodeKey";
+
+    /**
      * 邮件通知
      */
     String COMMENT_MAIL_NOTICE_ONOFF = "comment_mail_notice_onoff";
     String MESSAGE_MAIL_NOTICE_ONOFF = "message_mail_notice_onoff";
+    String USER_SIMPLE_REG_ONOFF = "user_simple_reg_onoff";
 
     /**
      * 信息板显示

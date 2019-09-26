@@ -1,5 +1,7 @@
 package me.wuwenbin.noteblogv5.config;
 
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -48,6 +50,16 @@ public class BeansConfig {
         Config config = new Config(properties);
         kaptcha.setConfig(config);
         return kaptcha;
+    }
+
+    /**
+     * 验证码缓存，10分钟有效
+     *
+     * @return
+     */
+    @Bean
+    public Cache<String, String> mailCodeCache() {
+        return CacheUtil.newTimedCache(10 * 60 * 1000);
     }
 
 

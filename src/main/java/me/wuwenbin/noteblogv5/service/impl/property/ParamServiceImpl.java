@@ -97,7 +97,8 @@ public class ParamServiceImpl extends ServiceImpl<ParamMapper, Param> implements
             paramMapper.updateValueByName(NBV5.UPLOAD_TYPE, type);
         }
         if (name.equalsIgnoreCase(NBV5.COMMENT_MAIL_NOTICE_ONOFF)
-                || name.equalsIgnoreCase(NBV5.MESSAGE_MAIL_NOTICE_ONOFF)) {
+                || name.equalsIgnoreCase(NBV5.MESSAGE_MAIL_NOTICE_ONOFF)
+                || name.equalsIgnoreCase(NBV5.USER_SIMPLE_REG_ONOFF)) {
             String adminEmail = userMapper.selectOne(Wrappers.<User>query().eq("role", RoleEnum.ADMIN.getValue())).getEmail();
             if (StrUtil.isEmpty(adminEmail)) {
                 return ResultBean.error("请先设置管理员邮箱！");

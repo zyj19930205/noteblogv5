@@ -17,10 +17,11 @@
     <style>
         input[disabled] {color: #cccccc;background-color: rgba(194, 194, 194, 0.3);}
         .ke-container .ke-toolbar .ke-separator {height: 20px !important;margin: 8px 3px !important;}
-        .ke-icon-hide4comment, .ke-icon-hide4login, .ke-icon-hide4purchase {width: 16px;height: 16px;}
+        .ke-icon-hide4comment, .ke-icon-hide4login, .ke-icon-hide4purchase, .ke-icon-br {width: 16px;height: 16px;}
         .ke-icon-hide4comment {background-image: url(/static/plugins/nkeditor/plugins/hide4comment/comment.png) !important;}
         .ke-icon-hide4login {background-image: url(/static/plugins/nkeditor/plugins/hide4login/login.png) !important;}
         .ke-icon-hide4purchase {background-image: url(/static/plugins/nkeditor/plugins/hide4purchase/purchase.png) !important;}
+        .ke-icon-br {background-image: url(/static/plugins/nkeditor/plugins/br/br.png) !important;}
     </style>
 </head>
 <body onscroll="isTop(this)">
@@ -220,7 +221,8 @@
     KindEditor.lang({
         hide4comment: '回复可见',
         hide4login: '登录可见',
-        hide4purchase: '购买可见'
+        hide4purchase: '购买可见',
+        br:'换行'
     });
 </script>
 </body>

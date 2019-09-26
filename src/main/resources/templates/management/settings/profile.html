@@ -210,6 +210,20 @@
                         </div>
                     </div>
 
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <p class="layui-form-label" style="width: 100%;text-align: left;">是否开启用户注册</p>
+                            <div class="layui-input-inline">
+                                <input type="checkbox" name="user_simple_reg_onoff" lay-skin="switch"
+                                       lay-text="开启|关闭"
+                                       lay-filter="switchFilter"
+                                       th:checked="${settings.user_simple_reg_onoff eq '1'}">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">让用户自定义用户名注册</div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 

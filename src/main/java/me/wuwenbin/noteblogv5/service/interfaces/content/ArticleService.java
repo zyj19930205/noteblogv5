@@ -41,11 +41,11 @@ public interface ArticleService extends IService<Article> {
     String HIDE_LOGIN = "login";
 
     String HIDE_COMMENT_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容回复可见，" +
-            "<a class=\"layui-text\" href=\"#comment-list\">点我回复</a></blockquote><br/>";
+            "<a class=\"layui-text\" href=\"#comment-list\">点我回复</a></blockquote>";
     String HIDE_PURCHASE_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容需购买，" +
-            "<a class=\"layui-text\" onclick=\"purchaseContent('{articleId}','{hideId}');\">点我购买</a></blockquote><br/>";
+            "<a class=\"layui-text\" onclick=\"purchaseContent('{articleId}','{hideId}');\">点我购买</a></blockquote>";
     String HIDE_LOGIN_REPLACEMENT = "<blockquote data-htype=\"{hideType}\" data-hid=\"{hideId}\" class=\"layui-elem-quote\">此处内容登录之后可见，" +
-            "<a class=\"layui-text\" href=\"/login?t={currentTimes}\" target=\"_blank\">点我登录</a></blockquote><br/>";
+            "<a class=\"layui-text\" href=\"/login?t={currentTimes}\" target=\"_blank\">点我登录</a></blockquote>";
 
 
     /**
