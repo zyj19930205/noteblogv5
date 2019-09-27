@@ -269,7 +269,7 @@ function submitComment(e) {
         var userId = $("input[name=userId]").val();
         if (userId === "") {
             layer.confirm('请先登录再操作，是否现在登录？', {icon: 4, title: '消息提示'}, function (index) {
-                location.href = "/login?redirectUrl=/message";
+                location.href = "/login?redirectUrl=" + location.href;
             });
         } else {
             var comment = $("textarea[name=comment]").val();

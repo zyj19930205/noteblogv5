@@ -75,7 +75,9 @@ layui.use(['form', 'jquery', 'sliderVerify'], function () {
                 if (resp.code === NBV5.status.ok) {
                     layer.msg("登录成功！");
                     setTimeout(function () {
-                        location.href = NBV5.url.manage_index;
+                        location.href =
+                            resp.redirectUrl !== null && resp.redirectUrl !== ""
+                                ? resp.redirectUrl : NBV5.url.manage_index;
                     }, 1000);
                 } else {
                     layer.msg("登录失败，" + resp.message);

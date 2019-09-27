@@ -108,7 +108,7 @@ public class ArticleController extends BaseController {
                                    @RequestParam String hideId, HttpServletRequest request) {
         User purchaseUser = getSessionUser(request);
         if (purchaseUser == null) {
-            return ResultBean.error("请先登录再进行购买操作！");
+            return ResultBean.error("请先登录再进行购买操作！").put("base", basePath(request));
         } else {
             long userId = purchaseUser.getId();
             int cnt = hideService.purchaseArticleHideContent(articleId, hideId, userId);

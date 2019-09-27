@@ -200,7 +200,7 @@
                         [[${latestComment.nickname}]]
                     </p>
                     <hr>
-                    <p>
+                    <p style="word-break: break-all;">
                         <span class="layui-word-aux">评论：</span>
                         [[${latestComment.comment.substring(0,#strings.length(latestComment.comment)>100?100:#strings.length(latestComment.comment))}]]
                     </p>
@@ -221,8 +221,8 @@
                         [[${latestMessage.nickname}]]
                     </p>
                     <hr>
-                    <p>
-                        <span class="layui-word-aux">评论：</span>
+                    <p style="word-break: break-all;">
+                        <span class="layui-word-aux">留言：</span>
                         [[${latestMessage.comment.substring(0,#strings.length(latestMessage.comment)>100?100:#strings.length(latestMessage.comment))}]]
                     </p>
                     <hr>

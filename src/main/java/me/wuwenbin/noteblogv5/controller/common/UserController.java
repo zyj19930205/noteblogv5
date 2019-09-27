@@ -136,7 +136,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean login(SimpleLoginData data) {
+    public ResultBean login(SimpleLoginData data, String redirectUrl) {
         if (StringUtils.isEmpty(data.getNbv5code())) {
             return ResultBean.error("验证码为空！");
         } else {
@@ -153,6 +153,10 @@ public class UserController extends BaseController {
         if (loginResult.get(ResultBean.CODE).equals(ResultBean.SUCCESS)) {
             User nbv5su = (User) loginResult.get("nbv5su");
             setSessionUser(request, nbv5su);
+        }
+        Object url = request.getSession().getAttribute("tempUrl");
+        if (!StringUtils.isEmpty(url)) {
+            loginResult.put("redirectUrl", url.toString());
         }
         return loginResult;
     }

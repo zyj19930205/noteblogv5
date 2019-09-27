@@ -504,7 +504,7 @@ function submitComment(e) {
         var articleId = $("input[name=articleId]").val();
         if (userId === "") {
             layer.confirm('请先登录再操作，是否现在登录？', {icon: 4, title: '消息提示'}, function (index) {
-                location.href = "/login?redirectUrl=/article/" + articleId;
+                location.href = "/login?redirectUrl=" + location.href;
             });
         } else {
             var comment = $("textarea[name=comment]").val();
@@ -595,11 +595,15 @@ function purchaseContent(articleId, hideId) {
             hideId: hideId
         },
         success: function (resp) {
-            layer.msg(resp.message);
             if (resp.code === 200) {
+                layer.msg(resp.message);
                 setTimeout(function () {
                     location.reload();
                 }, 888);
+            } else {
+                layer.confirm('请先登录再操作，是否现在登录？', {icon: 4, title: '消息提示'}, function (index) {
+                    window.location.href = "/login?redirectUrl=" + resp.base + "article/" + articleId;
+                });
             }
         }, error: function () {
             layer.msg("请稍后再试！");

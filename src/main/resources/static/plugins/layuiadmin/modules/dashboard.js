@@ -112,7 +112,7 @@ layui.define(function (exports) {
                 },
                 legend: {
                     orient: 'vertical',
-                    x: 'left',
+                    x: 'right',
                     data: txt
                 },
                 series: [{
